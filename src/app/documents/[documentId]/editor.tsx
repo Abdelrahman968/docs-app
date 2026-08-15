@@ -11,6 +11,7 @@ import Highlight from "@tiptap/extension-highlight";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
+import Link from "@tiptap/extension-link";
 
 function Editor() {
   const { setEditor } = useEditorStore();
@@ -54,6 +55,11 @@ function Editor() {
       TextStyle,
       FontFamily,
       Color,
+      Link.configure({
+        autolink: true,
+        defaultProtocol: "https",
+        openOnClick: false,
+      }),
       Highlight.configure({
         multicolor: true,
       }),

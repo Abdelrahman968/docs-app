@@ -1,9 +1,11 @@
 "use client";
+
 import {
   ALargeSmall,
   BoldIcon,
   FileType,
   FileTypeCorner,
+  HighlighterIcon,
   ItalicIcon,
   ListTodoIcon,
   LucideIcon,
@@ -17,7 +19,7 @@ import {
   Undo2Icon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useEditorState } from "@tiptap/react";
 import {
@@ -32,6 +34,7 @@ import {
 import { useState } from "react";
 import { fonts } from "@/constants/fonts";
 import { heading } from "@/constants/heading";
+import { Sketch } from "@uiw/react-color";
 
 interface ToolBarSectionProps {
   label: string;
@@ -46,6 +49,73 @@ interface ToolBarButtonProps {
   icon: LucideIcon;
   label: string;
 }
+
+const HightLightBTN = () => {
+  const { editor } = useEditorStore();
+
+  const value = editor?.getAttributes("highlight").color || "#000000";
+
+  const onChange = (color: { hex: string }) => {
+    editor?.chain().focus().setHighlight({ color: color.hex }).run();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        title="HightLight TXT"
+        render={
+          <Button
+            variant="outline"
+            className="h-7 shrink-0 flex flex-col items-center justify-center gap-0"
+          >
+            <HighlighterIcon />
+          </Button>
+        }
+      />
+      <DropdownMenuContent className="p-0 w-full overflow-hidden">
+        <Sketch
+          color={value}
+          onChange={onChange}
+          style={{ boxShadow: "none" }}
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const TextColoBTN = () => {
+  const { editor } = useEditorStore();
+
+  const value = editor?.getAttributes("textStyle").color || "#000000";
+
+  const onChange = (color: { hex: string }) => {
+    editor?.chain().focus().setColor(color.hex).run();
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        title="Color TXT"
+        render={
+          <Button
+            variant="outline"
+            className="h-7 shrink-0 flex flex-col items-center justify-center gap-0"
+          >
+            <span className="text-xs">A</span>
+            <div style={{ backgroundColor: value }} className="h-0.5 w-full" />
+          </Button>
+        }
+      />
+      <DropdownMenuContent className="p-0 w-full overflow-hidden">
+        <Sketch
+          color={value}
+          onChange={onChange}
+          style={{ boxShadow: "none" }}
+        />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const Heading = ({
   headingValue,
@@ -285,6 +355,16 @@ function ToolBar() {
                 headingValue={String(editorState?.headingValue ?? "0")}
                 headingLabel={editorState?.headingLabel ?? "Normal Text"}
               />
+            </div>
+          )}
+          {index === 1 && (
+            <div>
+              <TextColoBTN />
+            </div>
+          )}
+          {index === 1 && (
+            <div>
+              <HightLightBTN />
             </div>
           )}
         </div>

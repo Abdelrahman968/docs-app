@@ -1,5 +1,11 @@
 "use client";
 
+import "./style.scss";
+
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { TableKit } from "@tiptap/extension-table";
+import ImageResize from "tiptap-extension-resize-image";
+
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
@@ -9,11 +15,36 @@ function Editor() {
       attributes: {
         style: "padding-left:56px; padding-right:56px;",
         class:
-          "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] min-w-[816px] pt-10 pr-14 pb-10 cursor-text",
+          "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
       },
     },
-    extensions: [StarterKit],
-    content: "<p>Hello World! 🌎️</p>",
+    extensions: [
+      StarterKit,
+      TaskList,
+      ImageResize,
+      TaskItem.configure({
+        nested: true,
+      }),
+      TableKit.configure({
+        table: { resizable: true },
+      }),
+    ],
+    content: `
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th colspan="3">Description</th>
+            </tr>
+            <tr>
+              <td>Cyndi Lauper</td>
+              <td>Singer</td>
+              <td>Songwriter</td>
+              <td>Actress</td>
+            </tr>
+          </tbody>
+        </table>
+      `,
     immediatelyRender: false,
   });
 

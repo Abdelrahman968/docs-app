@@ -7,6 +7,7 @@ import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
 import { FontFamily, TextStyle, Color } from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
+import TextAlign from "@tiptap/extension-text-align";
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -55,6 +56,9 @@ function Editor() {
       TextStyle,
       FontFamily,
       Color,
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
       Link.configure({
         autolink: true,
         defaultProtocol: "https",

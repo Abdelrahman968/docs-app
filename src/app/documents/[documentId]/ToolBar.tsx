@@ -2,6 +2,7 @@
 
 import {
   ALargeSmall,
+  AlignLeftIcon,
   BoldIcon,
   CheckIcon,
   FileType,
@@ -10,6 +11,8 @@ import {
   ImageIcon,
   ItalicIcon,
   Link2Icon,
+  ListIcon,
+  ListOrderedIcon,
   ListTodoIcon,
   LucideIcon,
   MessageSquarePlusIcon,
@@ -51,6 +54,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { alignments } from "@/constants/alignments";
 
 interface ToolBarSectionProps {
   label: string;
@@ -65,6 +69,94 @@ interface ToolBarButtonProps {
   icon: LucideIcon;
   label: string;
 }
+
+const ListBTN = () => {
+  const { editor } = useEditorStore();
+
+  const lists = [
+    {
+      label: "Bullet List",
+      icon: ListIcon,
+      isActive: () => editor?.isActive("bulletList"),
+      onClick: () => editor?.chain().focus().toggleBulletList().run(),
+    },
+    {
+      label: "Ordered List",
+      icon: ListOrderedIcon,
+      isActive: () => editor?.isActive("orderedList"),
+      onClick: () => editor?.chain().focus().toggleOrderedList().run(),
+    },
+  ];
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        title="Text Alignment"
+        render={
+          <Button
+            variant="outline"
+            className="h-7 shrink-0 flex items-center justify-center"
+          >
+            <ListIcon className="size-4" />
+          </Button>
+        }
+      />
+
+      <DropdownMenuContent>
+        {lists.map(({ label, icon: Icon, onClick, isActive }) => (
+          <Button
+            key={label}
+            variant="ghost"
+            className={cn(
+              "w-full justify-start",
+              isActive() && "bg-neutral-200/80",
+            )}
+            onClick={onClick}
+          >
+            <Icon className="size-4" />
+            {label}
+          </Button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
+const AlignBTN = () => {
+  const { editor } = useEditorStore();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        title="Text Alignment"
+        render={
+          <Button
+            variant="outline"
+            className="h-7 shrink-0 flex items-center justify-center"
+          >
+            <AlignLeftIcon className="size-4" />
+          </Button>
+        }
+      />
+
+      <DropdownMenuContent>
+        {alignments.map(({ label, icon: Icon, value }) => (
+          <Button
+            key={value}
+            variant="ghost"
+            className="w-full justify-start"
+            onClick={() => {
+              editor?.chain().focus().setTextAlign(value).run();
+            }}
+          >
+            <Icon className="size-4" />
+            {label}
+          </Button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const ImageBTN = () => {
   const { editor } = useEditorStore();
@@ -571,6 +663,16 @@ function ToolBar() {
           {index === 1 && (
             <div>
               <ImageBTN />
+            </div>
+          )}
+          {index === 1 && (
+            <div>
+              <AlignBTN />
+            </div>
+          )}
+          {index === 1 && (
+            <div>
+              <ListBTN />
             </div>
           )}
         </div>

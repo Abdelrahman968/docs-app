@@ -3,6 +3,7 @@
 import {
   ALargeSmall,
   AlignLeftIcon,
+  BetweenHorizontalStart,
   BoldIcon,
   CheckIcon,
   Dot,
@@ -20,6 +21,7 @@ import {
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
+  Ruler,
   SearchIcon,
   SpellCheckIcon,
   TextInitial,
@@ -43,7 +45,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fonts } from "@/constants/fonts";
 import { heading } from "@/constants/heading";
 import { Sketch } from "@uiw/react-color";
@@ -71,6 +73,62 @@ interface ToolBarButtonProps {
   icon: LucideIcon;
   label: string;
 }
+
+const LineHeightBTN = () => {
+  const { editor } = useEditorStore();
+
+  const lineHeightOptions = ["1", "1.15", "1.5", "2", "3", "4"];
+
+  const [currentLineHeight, setCurrentLineHeight] = useState("1");
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateLineHeight = () => {
+      const lineHeight = editor.getAttributes("textStyle").lineHeight;
+
+      setCurrentLineHeight(lineHeight || "1");
+    };
+
+    editor.on("selectionUpdate", updateLineHeight);
+    editor.on("transaction", updateLineHeight);
+
+    updateLineHeight();
+
+    return () => {
+      editor.off("selectionUpdate", updateLineHeight);
+      editor.off("transaction", updateLineHeight);
+    };
+  }, [editor]);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        title="Line Height"
+        render={
+          <Button variant="outline">
+            <BetweenHorizontalStart size={16} />
+            {currentLineHeight}
+          </Button>
+        }
+      />
+
+      <DropdownMenuContent className="w-fit">
+        {lineHeightOptions.map((height) => (
+          <DropdownMenuItem
+            key={height}
+            onClick={() => {
+              editor?.chain().focus().setLineHeight(height).run();
+            }}
+          >
+            <Ruler size={16} />
+            {height}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const FontSizeBTN = () => {
   const { editor } = useEditorStore();
@@ -100,7 +158,7 @@ const FontSizeBTN = () => {
             key={size}
             onClick={() => editor?.chain().focus().setFontSize(size).run()}
           >
-            <Dot />
+            <Dot size={16} />
             <span style={{ fontSize: size }}>{size}</span>
           </DropdownMenuItem>
         ))}
@@ -717,6 +775,11 @@ function ToolBar() {
           {index === 1 && (
             <div>
               <FontSizeBTN />
+            </div>
+          )}
+          {index === 1 && (
+            <div>
+              <LineHeightBTN />
             </div>
           )}
         </div>

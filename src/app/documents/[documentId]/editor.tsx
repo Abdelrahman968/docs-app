@@ -5,7 +5,7 @@ import "./style.scss";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
-import { FontFamily, TextStyle, Color } from "@tiptap/extension-text-style";
+import { FontFamily, TextStyle, Color, FontSize } from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 
@@ -56,6 +56,7 @@ function Editor() {
       TextStyle,
       FontFamily,
       Color,
+      FontSize,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),

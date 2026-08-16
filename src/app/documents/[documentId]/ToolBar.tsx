@@ -5,6 +5,7 @@ import {
   AlignLeftIcon,
   BoldIcon,
   CheckIcon,
+  Dot,
   FileType,
   FileTypeCorner,
   HighlighterIcon,
@@ -21,6 +22,7 @@ import {
   RemoveFormattingIcon,
   SearchIcon,
   SpellCheckIcon,
+  TextInitial,
   TypeOutline,
   UnderlineIcon,
   Undo2Icon,
@@ -69,6 +71,43 @@ interface ToolBarButtonProps {
   icon: LucideIcon;
   label: string;
 }
+
+const FontSizeBTN = () => {
+  const { editor } = useEditorStore();
+
+  const sizes = ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"];
+
+  const currentSize = editor?.getAttributes("textStyle").fontSize || "8pt";
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        title="Font Size"
+        render={
+          <Button
+            variant="outline"
+            className="h-7 w-16 shrink-0 flex items-center justify-center"
+          >
+            <TextInitial />
+            {currentSize}
+          </Button>
+        }
+      />
+
+      <DropdownMenuContent className={"w-fit"}>
+        {sizes.map((size) => (
+          <DropdownMenuItem
+            key={size}
+            onClick={() => editor?.chain().focus().setFontSize(size).run()}
+          >
+            <Dot />
+            <span style={{ fontSize: size }}>{size}</span>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const ListBTN = () => {
   const { editor } = useEditorStore();
@@ -673,6 +712,11 @@ function ToolBar() {
           {index === 1 && (
             <div>
               <ListBTN />
+            </div>
+          )}
+          {index === 1 && (
+            <div>
+              <FontSizeBTN />
             </div>
           )}
         </div>

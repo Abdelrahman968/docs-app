@@ -134,8 +134,37 @@ const FontSizeBTN = () => {
   const { editor } = useEditorStore();
 
   const sizes = ["8pt", "10pt", "12pt", "14pt", "18pt", "24pt", "36pt"];
+  const [customSize, setCustomSize] = useState("");
 
-  const currentSize = editor?.getAttributes("textStyle").fontSize || "8pt";
+  const [currentSize, setCurrentSize] = useState<string>("8pt");
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateLineHeight = () => {
+      const currentSize = editor?.getAttributes("textStyle").fontSize;
+
+      setCurrentSize(currentSize || "8pt");
+    };
+
+    editor.on("selectionUpdate", updateLineHeight);
+    editor.on("transaction", updateLineHeight);
+
+    updateLineHeight();
+
+    return () => {
+      editor.off("selectionUpdate", updateLineHeight);
+      editor.off("transaction", updateLineHeight);
+    };
+  }, [editor]);
+
+  const setFontSize = (size: string) => {
+    if (!editor || !size.trim()) return;
+
+    editor.chain().focus().setFontSize(`${size}pt`).run();
+
+    setCustomSize("");
+  };
 
   return (
     <DropdownMenu>
@@ -153,6 +182,26 @@ const FontSizeBTN = () => {
       />
 
       <DropdownMenuContent className={"w-fit"}>
+        <div className="p-2 flex gap-1 justify-center items-center">
+          <Input
+            placeholder="Custom"
+            type="number"
+            min={1}
+            max={50}
+            value={customSize}
+            onChange={(e) => setCustomSize(e.target.value)}
+            onKeyDown={(e) => {
+              e.stopPropagation();
+              if (e.key === "Enter") {
+                setFontSize(customSize);
+              }
+            }}
+          />
+          <Button size={"icon-xs"} onClick={() => setFontSize(customSize)}>
+            <CheckIcon />
+          </Button>
+        </div>
+
         {sizes.map((size) => (
           <DropdownMenuItem
             key={size}

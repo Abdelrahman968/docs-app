@@ -114,6 +114,9 @@ const LineHeightBTN = () => {
       />
 
       <DropdownMenuContent className="w-fit">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Select Line Hight</DropdownMenuLabel>
+        </DropdownMenuGroup>
         {lineHeightOptions.map((height) => (
           <DropdownMenuItem
             key={height}
@@ -182,6 +185,9 @@ const FontSizeBTN = () => {
       />
 
       <DropdownMenuContent className={"w-fit"}>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Select Font Size</DropdownMenuLabel>
+        </DropdownMenuGroup>
         <div className="p-2 flex gap-1 justify-center items-center">
           <Input
             placeholder="Custom"
@@ -193,6 +199,7 @@ const FontSizeBTN = () => {
             onKeyDown={(e) => {
               e.stopPropagation();
               if (e.key === "Enter") {
+                e.preventDefault();
                 setFontSize(customSize);
               }
             }}

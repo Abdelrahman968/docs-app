@@ -13,6 +13,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
 import Link from "@tiptap/extension-link";
+import Ruler from "@/app/documents/[documentId]/Ruler";
 
 function Editor() {
   const { setEditor } = useEditorStore();
@@ -85,6 +86,7 @@ function Editor() {
 
   return (
     <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:bg-white print:p-0 print:overflow-visible">
+      <Ruler />
       <div className="min-w-max flex justify-center w-204 py-4 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
       </div>

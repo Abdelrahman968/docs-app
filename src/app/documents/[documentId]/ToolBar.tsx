@@ -24,6 +24,7 @@ import {
   Ruler,
   SearchIcon,
   SpellCheckIcon,
+  StrikethroughIcon,
   TextInitial,
   TypeOutline,
   UnderlineIcon,
@@ -687,6 +688,7 @@ function ToolBar() {
 
       return {
         isBold: ctx.editor?.isActive("bold") ?? false,
+        isStrike: ctx.editor?.isActive("strike") ?? false,
         isItalic: ctx.editor?.isActive("italic") ?? false,
         isUnderline: ctx.editor?.isActive("underline") ?? false,
         isTaskList: ctx.editor?.isActive("taskList") ?? false,
@@ -749,6 +751,12 @@ function ToolBar() {
         icon: UnderlineIcon,
         isActive: editorState?.isUnderline,
         onClick: () => editor?.chain().focus().toggleUnderline().run(),
+      },
+      {
+        label: "Strikethrough",
+        icon: StrikethroughIcon,
+        isActive: editorState?.isStrike,
+        onClick: () => editor?.chain().focus().toggleStrike().run(),
       },
     ],
     [

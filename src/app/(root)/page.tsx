@@ -1,9 +1,13 @@
+import Navbar from "@/app/(root)/Navbar";
 import Link from "next/link";
 
 function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <h1 className="text-3xl font-bold">
+    <div className="min-h-screen flex flex-col">
+      <div className="fixed top-0 left-0 right-0 z-10 h-16 bg-white p-4">
+        <Navbar />
+      </div>
+      <div className="text-3xl font-bold mt-16">
         Click{" "}
         <Link
           href="/documents/123"
@@ -12,7 +16,7 @@ function Home() {
           here
         </Link>{" "}
         to Document ID Page
-      </h1>
+      </div>
     </div>
   );
 }

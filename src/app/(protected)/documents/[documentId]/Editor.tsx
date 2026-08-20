@@ -13,7 +13,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
 import Link from "@tiptap/extension-link";
-import Ruler from "@/app/documents/[documentId]/Ruler";
+import Ruler from "@/app/(protected)/documents/[documentId]/Ruler";
 
 function Editor() {
   const { setEditor } = useEditorStore();

@@ -1,18 +1,29 @@
 "use client";
 
 import { ReactNode } from "react";
-import { ClerkProvider, SignIn, useAuth } from "@clerk/nextjs";
+import { ClerkProvider, useAuth } from "@clerk/nextjs";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-import {
-  ConvexReactClient,
-  Authenticated,
-  Unauthenticated,
-  AuthLoading,
-} from "convex/react";
+import { ConvexReactClient } from "convex/react";
 
 import Loading from "@/app/loading";
+import { Toaster } from "@/components/ui/toast";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+
+function ConvexAuthContent({ children }: { children: ReactNode }) {
+  const { isLoaded } = useAuth();
+
+  if (!isLoaded) {
+    return <Loading />;
+  }
+
+  return (
+    <>
+      {children}
+      <Toaster />
+    </>
+  );
+}
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
   return (
@@ -20,15 +31,7 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
       publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}
     >
       <ConvexProviderWithClerk useAuth={useAuth} client={convex}>
-        <Authenticated>{children}</Authenticated>
-        <Unauthenticated>
-          <div className="flex flex-col justify-center items-center min-h-screen">
-            <SignIn />
-          </div>
-        </Unauthenticated>
-        <AuthLoading>
-          <Loading />
-        </AuthLoading>
+        <ConvexAuthContent>{children}</ConvexAuthContent>
       </ConvexProviderWithClerk>
     </ClerkProvider>
   );

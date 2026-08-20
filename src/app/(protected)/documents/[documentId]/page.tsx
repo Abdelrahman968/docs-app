@@ -1,4 +1,4 @@
-import Navbar from "@/app/documents/[documentId]/Navbar";
+import Navbar from "@/app/(protected)/documents/[documentId]/Navbar";
 import Editor from "./Editor";
 import ToolBar from "./ToolBar";
 

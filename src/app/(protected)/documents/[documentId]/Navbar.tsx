@@ -1,5 +1,4 @@
 "use client";
-import DocumentInput from "@/app/documents/[documentId]/DocumentInput";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,6 +41,7 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
+import DocumentInput from "@/app/(protected)/documents/[documentId]/DocumentInput";
 
 const Navbar = () => {
   const { editor } = useEditorStore();

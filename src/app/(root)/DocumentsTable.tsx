@@ -62,18 +62,13 @@ const DocumentsTable = ({
           </TableBody>
         )}
       </Table>
-      <div className="flex items-center justify-center">
-        <Button
-          variant={"default"}
-          size={"sm"}
-          onClick={() => {
-            loadMore(5);
-          }}
-          disabled={status !== "CanLoadMore"}
-        >
-          {status === "CanLoadMore" ? "Load More" : "End of Result"}
-        </Button>
-      </div>
+      {status === "CanLoadMore" && (
+        <div className="flex items-center justify-center">
+          <Button variant="default" size="sm" onClick={() => loadMore(5)}>
+            Load More
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

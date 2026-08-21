@@ -6,6 +6,7 @@ import { mutation, query } from "./_generated/server";
 export const getDocuments = query({
   args: {
     paginationOpts: paginationOptsValidator,
+    search: v.optional(v.string()),
   },
 
   handler: async (ctx, args) => {
@@ -17,6 +18,17 @@ export const getDocuments = query({
         isDone: true,
         continueCursor: "",
       };
+    }
+
+    if (args.search) {
+      const search = args.search;
+
+      return await ctx.db
+        .query("documents")
+        .withSearchIndex("search_title", (q) => {
+          return q.search("title", search).eq("ownerID", user.subject);
+        })
+        .paginate(args.paginationOpts);
     }
 
     return await ctx.db

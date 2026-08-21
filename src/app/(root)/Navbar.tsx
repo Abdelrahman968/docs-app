@@ -2,7 +2,12 @@
 
 import SearchInput from "@/app/(root)/SearchInput";
 import { Button } from "@/components/ui/button";
-import { UserButton, SignInButton, useAuth } from "@clerk/nextjs";
+import {
+  UserButton,
+  SignInButton,
+  useAuth,
+  OrganizationSwitcher,
+} from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,7 +28,15 @@ const Navbar = () => {
         {!isLoaded ? (
           <div className="h-9 w-20 animate-pulse rounded-md bg-neutral-200" />
         ) : isSignedIn ? (
-          <UserButton />
+          <div className="flex gap-3 items-center shrink-0 pl-6">
+            <OrganizationSwitcher
+              afterCreateOrganizationUrl="/"
+              afterLeaveOrganizationUrl="/"
+              afterSelectOrganizationUrl="/"
+              afterSelectPersonalUrl="/"
+            />
+            <UserButton />
+          </div>
         ) : (
           <SignInButton mode="modal">
             <Button variant={"outline"}>Login</Button>

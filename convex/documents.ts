@@ -20,6 +20,30 @@ export const getDocuments = query({
       };
     }
 
+    const organizationId = (user.organization_id ?? undefined) as
+      string | undefined;
+
+    if (args.search && organizationId) {
+      const search = args.search;
+
+      return await ctx.db
+        .query("documents")
+        .withSearchIndex("search_title", (q) => {
+          return q.search("title", search).eq("organizationID", organizationId);
+        })
+        .paginate(args.paginationOpts);
+    }
+
+    if (organizationId) {
+      return await ctx.db
+        .query("documents")
+        .withIndex("by_organization_id", (q) =>
+          q.eq("organizationID", organizationId),
+        )
+        .order("desc")
+        .paginate(args.paginationOpts);
+    }
+
     if (args.search) {
       const search = args.search;
 
@@ -52,10 +76,14 @@ export const createDocument = mutation({
       throw new ConvexError("Not logged in");
     }
 
+    const organizationId = (user.organization_id ?? undefined) as
+      string | undefined;
+
     return await ctx.db.insert("documents", {
       title: args.title ?? "Untitled Document",
       initialContent: args.initialContent,
       ownerID: user.subject,
+      organizationID: organizationId,
     });
   },
 });
@@ -77,8 +105,12 @@ export const removeById = mutation({
       throw new ConvexError("Document not found");
     }
 
+    const organizationId = user.organization_role ?? undefined;
+
     const isOwner = document.ownerID === user.subject;
-    if (!isOwner) {
+    const isOrganizationOwner = document.organizationID === organizationId;
+
+    if (!isOwner && !isOrganizationOwner) {
       throw new ConvexError("Not the owner");
     }
 
@@ -104,8 +136,13 @@ export const updateById = mutation({
       throw new ConvexError("Document not found");
     }
 
+    const organizationId = (user.organization_id ?? undefined) as
+      string | undefined;
+
     const isOwner = document.ownerID === user.subject;
-    if (!isOwner) {
+    const isOrganizationMember = document.organizationID === organizationId;
+
+    if (!isOwner && !isOrganizationMember) {
       throw new ConvexError("Not the owner");
     }
 

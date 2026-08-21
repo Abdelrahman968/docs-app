@@ -42,6 +42,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import DocumentInput from "@/app/(protected)/documents/[documentId]/DocumentInput";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   const { editor } = useEditorStore();
@@ -92,7 +93,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex item-center justify-between">
+    <nav className="flex items-center justify-between px-6">
       <div className="flex gap-2 items-center">
         <Link href="/">
           <Image src="/logo.svg" alt="logo" width={36} height={36} />
@@ -290,6 +291,17 @@ const Navbar = () => {
               </MenubarMenu>
             </Menubar>
           </div>
+        </div>
+      </div>
+      <div className="scale-125">
+        <div className="flex gap-3 items-center pl-6">
+          <OrganizationSwitcher
+            afterCreateOrganizationUrl="/"
+            afterLeaveOrganizationUrl="/"
+            afterSelectOrganizationUrl="/"
+            afterSelectPersonalUrl="/"
+          />
+          <UserButton />
         </div>
       </div>
     </nav>

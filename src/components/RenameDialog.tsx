@@ -74,21 +74,33 @@ const RenameDialog = ({
           />
           <Button
             disabled={isRename}
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
+
               setIsRename(true);
               onOpenChange(false);
 
-              rename({
-                id: documentId,
-                title: newTitle.trim() || "Untitled",
-              }).finally(() => {
-                setIsRename(false);
+              try {
+                await rename({
+                  id: documentId,
+                  title: newTitle.trim() || "Untitled",
+                });
+
                 toast.add({
                   type: "success",
                   description: "Document renamed successfully",
                 });
-              });
+              } catch (error) {
+                console.error(error);
+
+                toast.add({
+                  type: "error",
+                  description:
+                    "You don't have permission to rename this document",
+                });
+              } finally {
+                setIsRename(false);
+              }
             }}
           >
             Save changes

@@ -47,3 +47,56 @@ export const createDocument = mutation({
     });
   },
 });
+
+export const removeById = mutation({
+  args: {
+    id: v.id("documents"),
+  },
+
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+
+    if (!user) {
+      throw new ConvexError("Not logged in");
+    }
+
+    const document = await ctx.db.get(args.id);
+    if (!document) {
+      throw new ConvexError("Document not found");
+    }
+
+    const isOwner = document.ownerID === user.subject;
+    if (!isOwner) {
+      throw new ConvexError("Not the owner");
+    }
+
+    return await ctx.db.delete(args.id);
+  },
+});
+
+export const updateById = mutation({
+  args: {
+    id: v.id("documents"),
+    title: v.string(),
+  },
+
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity();
+
+    if (!user) {
+      throw new ConvexError("Not logged in");
+    }
+
+    const document = await ctx.db.get(args.id);
+    if (!document) {
+      throw new ConvexError("Document not found");
+    }
+
+    const isOwner = document.ownerID === user.subject;
+    if (!isOwner) {
+      throw new ConvexError("Not the owner");
+    }
+
+    return await ctx.db.patch(args.id, { title: args.title });
+  },
+});

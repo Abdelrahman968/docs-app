@@ -4,14 +4,18 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Doc } from "../../../convex/_generated/dataModel";
 
 import { SiGoogledocs } from "react-icons/si";
-import { Building2Icon, CircleUserIcon, MoreVertical } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Building2Icon, CircleUserIcon } from "lucide-react";
+import DocumentMenu from "@/app/(root)/DocumentMenu";
 
 interface DocumentRowProps {
   document: Doc<"documents">;
 }
 
 const DocumentRow = ({ document }: DocumentRowProps) => {
+  const onNewTapClick = (id: string) => {
+    window.open(`/documents/${id}`, "_blank");
+  };
+
   return (
     <TableRow>
       <TableCell className="w-12.5">
@@ -30,9 +34,11 @@ const DocumentRow = ({ document }: DocumentRowProps) => {
         {format(new Date(document._creationTime), "MMM dd, yyyy")}
       </TableCell>
       <TableCell className="flex justify-end">
-        <Button variant={"ghost"} size="icon" className={"rounded-full"}>
-          <MoreVertical className="size-4" />
-        </Button>
+        <DocumentMenu
+          documentId={document._id}
+          title={document.title}
+          onNewTapClick={onNewTapClick}
+        />
       </TableCell>
     </TableRow>
   );

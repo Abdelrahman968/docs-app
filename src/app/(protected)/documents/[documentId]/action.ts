@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 
 type ClerkSessionClaims = {
   o?: {
@@ -9,6 +9,12 @@ type ClerkSessionClaims = {
     slg?: string;
   };
 };
+
+export async function getCurrentUserId() {
+  const user = await currentUser();
+
+  return user?.id ?? null;
+}
 
 export async function getUser() {
   const { sessionClaims } = await auth();

@@ -154,3 +154,7 @@
     display: none;
   }
 }
+#liveblocks-badge,
+#liveblocks-badge-hide-button {
+  display: none !important;
+}

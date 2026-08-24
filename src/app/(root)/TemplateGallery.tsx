@@ -39,18 +39,18 @@ const TemplateGallery = () => {
     setIsCreating(true);
 
     create({ title, initialContent })
-      .catch(() => {
-        toast.add({
-          type: "error",
-          description: "Failed to create document",
-        });
-      })
       .then((documentID) => {
         toast.add({
           type: "success",
           description: "Created document",
         });
         router.push(`/documents/${documentID}`);
+      })
+      .catch(() => {
+        toast.add({
+          type: "error",
+          description: "Failed to create document",
+        });
       })
       .finally(() => {
         setIsCreating(false);

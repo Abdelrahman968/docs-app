@@ -1,9 +1,9 @@
 import { Trefoil } from "ldrs/react";
 import "ldrs/react/Trefoil.css";
 
-const loading = () => {
+const loading = ({ label = "Authenticating" }: { label: string }) => {
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex flex-col gap-2 min-h-screen items-center justify-center">
       <Trefoil
         size="70"
         stroke="4"
@@ -12,6 +12,7 @@ const loading = () => {
         speed="1.4"
         color="black"
       />
+      <span className="text-center">{label}</span>
     </div>
   );
 };

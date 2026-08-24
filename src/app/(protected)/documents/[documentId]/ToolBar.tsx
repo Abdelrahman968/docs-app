@@ -698,6 +698,7 @@ function ToolBar() {
           ctx.editor?.getAttributes("textStyle").fontFamily || "Arial",
         headingValue: currentHeading?.value ?? "0",
         headingLabel: currentHeading?.label ?? "Normal Text",
+        isComment: ctx.editor?.isActive("liveblocksCommentMark") ?? false,
       };
     },
   });
@@ -763,7 +764,8 @@ function ToolBar() {
       {
         label: "Comment",
         icon: MessageSquarePlusIcon,
-        onClick: () => alert("Comment feature is not implemented yet."),
+        onClick: () => editor?.chain().focus().addPendingComment().run(),
+        isActive: editorState?.isComment,
       },
       {
         label: "List TODO",

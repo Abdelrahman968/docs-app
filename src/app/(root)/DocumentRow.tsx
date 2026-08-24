@@ -6,6 +6,7 @@ import { Doc } from "../../../convex/_generated/dataModel";
 import { SiGoogledocs } from "react-icons/si";
 import { Building2Icon, CircleUserIcon } from "lucide-react";
 import DocumentMenu from "@/app/(root)/DocumentMenu";
+import Link from "next/link";
 
 interface DocumentRowProps {
   document: Doc<"documents">;
@@ -21,7 +22,13 @@ const DocumentRow = ({ document }: DocumentRowProps) => {
       <TableCell className="w-12.5">
         <SiGoogledocs className="size-6 fill-blue-500" />
       </TableCell>
-      <TableCell className="font-medium md:w-[45%]">{document.title}</TableCell>
+      <TableCell className="font-medium md:w-[45%]">
+        <Link href={`/documents/${document._id}`}>
+          <span className="hover:font-bold transition-all duration-300 ease-in-out">
+            {document.title}
+          </span>
+        </Link>
+      </TableCell>
       <TableCell className="text-muted-foreground hidden md:flex items-center gap-2">
         {document.organizationID ? (
           <Building2Icon className="size-4" />

@@ -1,6 +1,7 @@
 import Navbar from "@/app/(protected)/documents/[documentId]/Navbar";
 import Editor from "./Editor";
 import ToolBar from "./ToolBar";
+import { Room } from "@/app/(protected)/documents/[documentId]/Room";
 
 interface DocDetailsProps {
   params: Promise<{ documentId: string }>;
@@ -15,7 +16,9 @@ async function DocDetails({ params }: DocDetailsProps) {
         <ToolBar />
       </div>
       <div className="pt-28.5 print:pt-0">
-        <Editor />
+        <Room>
+          <Editor />
+        </Room>
       </div>
     </div>
   );

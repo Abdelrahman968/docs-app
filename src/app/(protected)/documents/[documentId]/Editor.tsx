@@ -2,10 +2,21 @@
 
 import "./style.scss";
 
+import {
+  useLiveblocksExtension,
+  FloatingToolbar,
+} from "@liveblocks/react-tiptap";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { TableKit } from "@tiptap/extension-table";
 import ImageResize from "tiptap-extension-resize-image";
-import { FontFamily, TextStyle, Color, FontSize, LineHeight, TextStyleKit } from "@tiptap/extension-text-style";
+import {
+  FontFamily,
+  TextStyle,
+  Color,
+  FontSize,
+  LineHeight,
+  TextStyleKit,
+} from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 
@@ -14,9 +25,11 @@ import StarterKit from "@tiptap/starter-kit";
 import { useEditorStore } from "@/store/use-editor-store";
 import Link from "@tiptap/extension-link";
 import Ruler from "@/app/(protected)/documents/[documentId]/Ruler";
+import { Threads } from "@/app/(protected)/documents/[documentId]/Threads";
 
 function Editor() {
   const { setEditor } = useEditorStore();
+  const liveblocks = useLiveblocksExtension();
 
   const editor = useEditor({
     onCreate({ editor }) {
@@ -51,7 +64,10 @@ function Editor() {
       },
     },
     extensions: [
-      StarterKit,
+      liveblocks,
+      StarterKit.configure({
+        undoRedo: false,
+      }),
       TaskList,
       ImageResize,
       TextStyle,
@@ -89,6 +105,8 @@ function Editor() {
       <Ruler />
       <div className="min-w-max flex justify-center w-204 py-4 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
+        <FloatingToolbar editor={editor} />
       </div>
     </div>
   );

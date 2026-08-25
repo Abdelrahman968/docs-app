@@ -160,3 +160,55 @@ export const getById = query({
     return await ctx.db.get(id);
   },
 });
+
+export const getByIds = query({
+  args: {
+    ids: v.array(v.id("documents")),
+  },
+
+  handler: async (ctx, { ids }) => {
+    const user = await ctx.auth.getUserIdentity();
+
+    if (!user) {
+      return [];
+    }
+
+    const organizationId = user.organization_id ?? undefined;
+
+    const documents = [];
+
+    for (const id of ids) {
+      const document = await ctx.db.get(id);
+
+      if (!document) {
+        documents.push({
+          id,
+          name: "[deleted]",
+        });
+
+        continue;
+      }
+
+      const isOwner = document.ownerID === user.subject;
+
+      const isOrganizationMember =
+        !!organizationId && document.organizationID === organizationId;
+
+      if (!isOwner && !isOrganizationMember) {
+        documents.push({
+          id,
+          name: "[private]",
+        });
+
+        continue;
+      }
+
+      documents.push({
+        id: document._id,
+        name: document.title,
+      });
+    }
+
+    return documents;
+  },
+});

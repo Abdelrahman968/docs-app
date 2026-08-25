@@ -10,8 +10,12 @@ import { useParams } from "next/navigation";
 import { Waveform } from "ldrs/react";
 import "ldrs/react/Waveform.css";
 
-import { getUser } from "@/app/(protected)/documents/[documentId]/action";
+import {
+  getDocuments,
+  getUser,
+} from "@/app/(protected)/documents/[documentId]/action";
 import { getCurrentUserId } from "@/app/(protected)/documents/[documentId]/action";
+import { Id } from "../../../../../convex/_generated/dataModel";
 
 export function Room({ children }: { children: ReactNode }) {
   const params = useParams();
@@ -26,7 +30,20 @@ export function Room({ children }: { children: ReactNode }) {
   return (
     <LiveblocksProvider
       throttle={16}
-      authEndpoint="/api/liveblocks-auth"
+      authEndpoint={async () => {
+        const endPoint = "/api/liveblocks-auth";
+        const room = params.documentId as string;
+
+        const res = await fetch(endPoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ room }),
+        });
+
+        return await res.json();
+      }}
       resolveUsers={async ({ userIds }) => {
         try {
           const users = await getUser();
@@ -66,7 +83,18 @@ export function Room({ children }: { children: ReactNode }) {
           return [];
         }
       }}
-      resolveRoomsInfo={() => []}
+      resolveRoomsInfo={async ({ roomIds }) => {
+        const documentIds = roomIds.map((roomId) =>
+          roomId.replace("document:", ""),
+        ) as Id<"documents">[];
+
+        const documents = await getDocuments(documentIds);
+
+        return documents.map((document) => ({
+          id: document.id,
+          name: document.name,
+        }));
+      }}
     >
       <RoomProvider id={roomId}>
         <ClientSideSuspense

@@ -52,6 +52,7 @@ import DocumentInput from "@/app/(protected)/documents/[documentId]/DocumentInpu
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 import Avatars from "@/app/(protected)/documents/[documentId]/Avatars";
+import Inbox from "@/app/(protected)/documents/[documentId]/Inbox";
 
 const Navbar = () => {
   const { editor } = useEditorStore();
@@ -349,6 +350,10 @@ const Navbar = () => {
       <div className="flex shrink-0 items-center gap-2">
         <div className="flex items-center">
           <Avatars />
+        </div>
+
+        <div className="flex items-center">
+          <Inbox />
         </div>
 
         <div className="flex items-center rounded-md border px-1 py-0.5">

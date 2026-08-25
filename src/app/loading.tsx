@@ -1,7 +1,11 @@
 import { Trefoil } from "ldrs/react";
 import "ldrs/react/Trefoil.css";
 
-const loading = ({ label = "Authenticating" }: { label: string }) => {
+interface loadingProps {
+  label?: string;
+}
+
+const loading = ({ label = "Authenticating" }: loadingProps) => {
   return (
     <div className="flex flex-col gap-2 min-h-screen items-center justify-center">
       <Trefoil

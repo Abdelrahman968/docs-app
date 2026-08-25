@@ -23,7 +23,6 @@ const Ruler = () => {
     storage.set("rightMargin", position);
   }, []);
 
-
   const [dragging, setDragging] = useState<"left" | "right" | null>(null);
 
   const rulerRef = useRef<HTMLDivElement>(null);
@@ -47,26 +46,21 @@ const Ruler = () => {
       }
 
       const rect = container.getBoundingClientRect();
-
       const relativeX = clientX - rect.left;
-
       const position = Math.max(0, Math.min(PAGE_WIDTH, relativeX));
 
       if (dragging === "left") {
         const maxleftMargin = PAGE_WIDTH - rightMargin - MIN_CONTENT_SPACE;
-
         setLeftMargin(Math.min(position, maxleftMargin));
       }
 
       if (dragging === "right") {
         const maxrightMargin = PAGE_WIDTH - leftMargin - MIN_CONTENT_SPACE;
-
         const right = PAGE_WIDTH - position;
-
         setRightMargin(Math.min(Math.max(0, right), maxrightMargin));
       }
     },
-    [dragging, leftMargin, rightMargin],
+    [dragging, leftMargin, rightMargin, setLeftMargin, setRightMargin],
   );
 
   useEffect(() => {

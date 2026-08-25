@@ -134,30 +134,33 @@ export const updateById = mutation({
     }
 
     const document = await ctx.db.get(args.id);
+
     if (!document) {
       throw new ConvexError("Document not found");
     }
 
-    const organizationId = (user.organization_id ?? undefined) as
-      string | undefined;
-
     const isOwner = document.ownerID === user.subject;
-    const isOrganizationMember = !!(
-      document.organizationID && document.organizationID === organizationId
-    );
 
-    if (!isOwner && !isOrganizationMember) {
-      throw new ConvexError("Not the owner");
+    if (!isOwner) {
+      throw new ConvexError("Only the document creator can rename it");
     }
 
-    return await ctx.db.patch(args.id, { title: args.title });
+    return await ctx.db.patch(args.id, {
+      title: args.title,
+    });
   },
 });
 
 export const getById = query({
   args: { id: v.id("documents") },
   handler: async (ctx, { id }) => {
-    return await ctx.db.get(id);
+    const document = await ctx.db.get(id);
+
+    if (!document) {
+      throw new ConvexError("Document not found");
+    }
+
+    return document;
   },
 });
 

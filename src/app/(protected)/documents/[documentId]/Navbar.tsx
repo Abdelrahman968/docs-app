@@ -37,6 +37,7 @@ import {
   UnderlineIcon,
   Undo2Icon,
   ItalicIcon,
+  FileInput,
 } from "lucide-react";
 
 import { FaFilePdf } from "react-icons/fa6";
@@ -53,8 +54,13 @@ import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 import Avatars from "@/app/(protected)/documents/[documentId]/Avatars";
 import Inbox from "@/app/(protected)/documents/[documentId]/Inbox";
+import { Doc } from "../../../../../convex/_generated/dataModel";
 
-const Navbar = () => {
+interface NavbarProps {
+  data: Doc<"documents">;
+}
+
+const Navbar = ({ data }: NavbarProps) => {
   const { editor } = useEditorStore();
 
   const [withHeader, setWithHeader] = useState(false);
@@ -84,7 +90,7 @@ const Navbar = () => {
       type: "application/json",
     });
 
-    onDownload(blob, "document.json");
+    onDownload(blob, `${data.title}.json`);
   };
 
   const onSaveHTML = () => {
@@ -96,7 +102,7 @@ const Navbar = () => {
       type: "text/html",
     });
 
-    onDownload(blob, "document.html");
+    onDownload(blob, `${data.title}.html`);
   };
 
   const onSaveText = () => {
@@ -108,7 +114,34 @@ const Navbar = () => {
       type: "text/plain",
     });
 
-    onDownload(blob, "document.txt");
+    onDownload(blob, `${data.title}.txt`);
+  };
+
+  const onSaveDocs = async () => {
+    if (!editor) return;
+
+    try {
+      const response = await fetch("/api/export-docx", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: editor.getHTML(),
+          title: data.title,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to export DOCX");
+      }
+
+      const blob = await response.blob();
+
+      onDownload(blob, `${data.title}.docx`);
+    } catch (error) {
+      console.error("Failed to save DOCX:", error);
+    }
   };
 
   return (
@@ -123,7 +156,7 @@ const Navbar = () => {
 
         <div className="flex min-w-0 flex-col">
           <div className="max-w-75">
-            <DocumentInput />
+            <DocumentInput title={data.title} id={data._id} />
           </div>
 
           <div className="flex">
@@ -142,6 +175,11 @@ const Navbar = () => {
 
                     <MenubarSubContent className="print:hidden">
                       <MenubarGroup>
+                        <MenubarItem onClick={onSaveDocs}>
+                          <FileInput className="size-4" />
+                          Docs
+                        </MenubarItem>
+
                         <MenubarItem onClick={onSaveJSON}>
                           <FileJson className="size-4" />
                           JSON

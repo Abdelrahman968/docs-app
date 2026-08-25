@@ -96,7 +96,10 @@ export function Room({ children }: { children: ReactNode }) {
         }));
       }}
     >
-      <RoomProvider id={roomId}>
+      <RoomProvider
+        id={roomId}
+        initialStorage={{ leftMargin: 56, rightMargin: 56 }}
+      >
         <ClientSideSuspense
           fallback={
             <div className="flex min-h-screen flex-col items-center justify-center gap-2">

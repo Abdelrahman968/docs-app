@@ -1,5 +1,6 @@
 "use client";
 
+import { useMutation, useStorage } from "@liveblocks/react/suspense";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { FaCaretDown } from "react-icons/fa";
@@ -11,9 +12,17 @@ const MIN_CONTENT_SPACE = 100;
 const markers = Array.from({ length: 83 }, (_, index) => index);
 
 const Ruler = () => {
-  const [leftPosition, setLeftPosition] = useState(DEFAULT_MARGIN);
+  const leftMargin = useStorage((root) => root.leftMargin) ?? 56;
+  const rightMargin = useStorage((root) => root.rightMargin) ?? 56;
 
-  const [rightPosition, setRightPosition] = useState(DEFAULT_MARGIN);
+  const setLeftMargin = useMutation(({ storage }, position: number) => {
+    storage.set("leftMargin", position);
+  }, []);
+
+  const setRightMargin = useMutation(({ storage }, position: number) => {
+    storage.set("rightMargin", position);
+  }, []);
+
 
   const [dragging, setDragging] = useState<"left" | "right" | null>(null);
 
@@ -44,20 +53,20 @@ const Ruler = () => {
       const position = Math.max(0, Math.min(PAGE_WIDTH, relativeX));
 
       if (dragging === "left") {
-        const maxLeftPosition = PAGE_WIDTH - rightPosition - MIN_CONTENT_SPACE;
+        const maxleftMargin = PAGE_WIDTH - rightMargin - MIN_CONTENT_SPACE;
 
-        setLeftPosition(Math.min(position, maxLeftPosition));
+        setLeftMargin(Math.min(position, maxleftMargin));
       }
 
       if (dragging === "right") {
-        const maxRightPosition = PAGE_WIDTH - leftPosition - MIN_CONTENT_SPACE;
+        const maxrightMargin = PAGE_WIDTH - leftMargin - MIN_CONTENT_SPACE;
 
         const right = PAGE_WIDTH - position;
 
-        setRightPosition(Math.min(Math.max(0, right), maxRightPosition));
+        setRightMargin(Math.min(Math.max(0, right), maxrightMargin));
       }
     },
-    [dragging, leftPosition, rightPosition],
+    [dragging, leftMargin, rightMargin],
   );
 
   useEffect(() => {
@@ -85,11 +94,11 @@ const Ruler = () => {
   }, [dragging, updatePosition]);
 
   const resetLeft = () => {
-    setLeftPosition(DEFAULT_MARGIN);
+    setLeftMargin(DEFAULT_MARGIN);
   };
 
   const resetRight = () => {
-    setRightPosition(DEFAULT_MARGIN);
+    setRightMargin(DEFAULT_MARGIN);
   };
 
   return (
@@ -109,7 +118,7 @@ const Ruler = () => {
     >
       <div data-ruler-container className="relative h-full w-204">
         <Marker
-          position={leftPosition}
+          position={leftMargin}
           side="left"
           isDragging={dragging === "left"}
           onMouseDown={() => handleMouseDown("left")}
@@ -117,7 +126,7 @@ const Ruler = () => {
         />
 
         <Marker
-          position={rightPosition}
+          position={rightMargin}
           side="right"
           isDragging={dragging === "right"}
           onMouseDown={() => handleMouseDown("right")}

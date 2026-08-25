@@ -16,6 +16,8 @@ import {
 } from "@/app/(protected)/documents/[documentId]/action";
 import { getCurrentUserId } from "@/app/(protected)/documents/[documentId]/action";
 import { Id } from "../../../../../convex/_generated/dataModel";
+import { LEFT_MARGIN_DEFAULT, RIGHT_MARGIN_DEFAULT } from "@/constants/margin";
+import { getUserColor } from "@/lib/get-user-color";
 
 export function Room({ children }: { children: ReactNode }) {
   const params = useParams();
@@ -58,6 +60,7 @@ export function Room({ children }: { children: ReactNode }) {
             return {
               name: userId === currentUserId ? "Me" : user.name,
               avatar: user.avatar,
+              color: getUserColor(user.name),
             };
           });
         } catch (error) {
@@ -98,7 +101,10 @@ export function Room({ children }: { children: ReactNode }) {
     >
       <RoomProvider
         id={roomId}
-        initialStorage={{ leftMargin: 56, rightMargin: 56 }}
+        initialStorage={{
+          leftMargin: LEFT_MARGIN_DEFAULT,
+          rightMargin: RIGHT_MARGIN_DEFAULT,
+        }}
       >
         <ClientSideSuspense
           fallback={

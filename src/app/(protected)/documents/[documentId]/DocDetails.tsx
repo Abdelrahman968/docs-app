@@ -21,7 +21,7 @@ function DocDetails({ preLoadedDocument }: DocDetailsProps) {
           <ToolBar />
         </div>
         <div className="pt-28.5 print:pt-0">
-          <Editor />
+          <Editor initialContent={document.initialContent} />
         </div>
       </div>
     </Room>

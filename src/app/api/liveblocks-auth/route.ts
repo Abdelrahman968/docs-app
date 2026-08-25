@@ -3,6 +3,7 @@ import { ConvexHttpClient } from "convex/browser";
 import { auth, currentUser } from "@clerk/nextjs/server";
 
 import { api } from "../../../../convex/_generated/api";
+import { getUserColor } from "@/lib/get-user-color";
 
 type ClerkSessionClaims = {
   o?: {
@@ -71,12 +72,15 @@ export async function POST(req: Request) {
       });
     }
 
+    const name =
+      user.fullName ?? user.primaryEmailAddress?.emailAddress ?? "Anonymous";
+
+    const color = getUserColor(name);
+
     const session = liveblocks.prepareSession(user.id, {
       userInfo: {
-        name:
-          user.fullName ??
-          user.primaryEmailAddress?.emailAddress ??
-          "Anonymous",
+        name,
+        color,
         avatar: user.imageUrl,
       },
     });

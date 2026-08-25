@@ -386,7 +386,7 @@ const Navbar = ({ data }: NavbarProps) => {
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <div className="flex items-center">
+        <div className="hidden md:flex items-center">
           <Avatars />
         </div>
 
@@ -394,7 +394,7 @@ const Navbar = ({ data }: NavbarProps) => {
           <Inbox />
         </div>
 
-        <div className="flex items-center rounded-md border px-1 py-0.5">
+        <div className=" items-center rounded-md border px-1 py-0.5 hidden md:flex">
           <OrganizationSwitcher
             afterCreateOrganizationUrl="/"
             afterLeaveOrganizationUrl="/"

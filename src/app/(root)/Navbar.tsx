@@ -47,21 +47,23 @@ const Navbar = () => {
             </div>
           ) : isSignedIn ? (
             <div className="flex items-center gap-2 rounded-xl border bg-background p-1 shadow-sm">
-              <OrganizationSwitcher
-                afterCreateOrganizationUrl="/"
-                afterLeaveOrganizationUrl="/"
-                afterSelectOrganizationUrl="/"
-                afterSelectPersonalUrl="/"
-                appearance={{
-                  elements: {
-                    rootBox: "h-9",
-                    organizationSwitcherTrigger:
-                      "h-9 rounded-lg border-0 px-2.5 hover:bg-muted transition-colors",
-                  },
-                }}
-              />
+              <div className="hidden md:flex">
+                <OrganizationSwitcher
+                  afterCreateOrganizationUrl="/"
+                  afterLeaveOrganizationUrl="/"
+                  afterSelectOrganizationUrl="/"
+                  afterSelectPersonalUrl="/"
+                  appearance={{
+                    elements: {
+                      rootBox: "h-9",
+                      organizationSwitcherTrigger:
+                        "h-9 rounded-lg border-0 px-2.5 hover:bg-muted transition-colors",
+                    },
+                  }}
+                />
 
-              <div className="h-6 w-px bg-border" />
+                <div className="h-6 w-px bg-border" />
+              </div>
 
               <div className="flex size-9 items-center justify-center">
                 <UserButton

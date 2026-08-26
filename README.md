@@ -11,7 +11,7 @@ A full-featured, real-time collaborative document editor built with the latest w
 ![Liveblocks](https://img.shields.io/badge/Realtime-Liveblocks-000000)
 ![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)
 
-**🔗 Live Demo:** [docs-app-rust-three.vercel.app](https://docs-app-rust-three.vercel.app/)
+**🔗 Live Demo:** [docs-app-wheat-two.vercel.app](https://docs-app-wheat-two.vercel.app/)
 **💻 Repository:** [github.com/Abdelrahman968/docs-app](https://github.com/Abdelrahman968/docs-app/)
 
 ---
@@ -186,7 +186,7 @@ vercel deploy
 
 Make sure to add the same environment variables in your Vercel project settings.
 
-Live version: **[docs-app-rust-three.vercel.app](https://docs-app-rust-three.vercel.app/)**
+Live version: **[docs-app-wheat-two.vercel.app](https://docs-app-wheat-two.vercel.app/)**
 
 ---
 
